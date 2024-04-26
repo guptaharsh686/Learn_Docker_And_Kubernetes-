@@ -1,10 +1,15 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
-COPY . .
-EXPOSE 3000
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+FROM node:latest as build
+WORKDIR /usr/local/app
+
+COPY ./ /usr/local/app/
+
+RUN npm install
+
+RUN npm run build
+
+
+FROM nginx:latest
+
+COPY --from=build /usr/local/app/dist/learn-docker-app /usr/share/nginx/html
+
+EXPOSE 80
