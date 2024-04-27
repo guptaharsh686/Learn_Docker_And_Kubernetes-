@@ -14,4 +14,4 @@ FROM nginx:latest
 # copy compiled files to nginx to serve
 COPY --from=build /usr/local/app/dist/learn-docker-app /usr/share/nginx/html
 
-EXPOSE 80
+#EXPOSE 80
